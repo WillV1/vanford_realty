@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/header.ejs') %>
+</head>
+<body>
+  <%- include('../partials/nav.ejs') %>
+  <div class='container'>
+    <div class='realtors-background'></div>
+    <div class='row'>
+      <div class='col-sm'>
+        <h1>Welcome <%= user.name %>!</h1>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-sm'>
+        <h3 id="menu-items">What Would You Like to Do?</h3>
+      </div>
+    </div>
+    
+    <div class="new-listing">
+      <button type="button" class="btn buttons-custom"><a class='dark' href='/listings/new'>Add a New Listing</a></button>
+    </div>
+    <div class="new-city">
+      <button type="button" class="btn buttons-custom"><a class='dark' href='/cities/new'>Add a City</a></button>
+    </div>
+    <div class="edit-city">
+      <button type="button" class="btn buttons-custom"><a class='dark' href='/cities/'>Edit a City</a></button>
+    </div>
+  
+    <div class='listing'>
+      <% for (let i = 0; i < listings.length; i++) { %>
+        <% if (user.houses.includes(listings[i]._id)) { %>
+          <ul class='house-listing'>
+            <li><%= listings[i].address %></li>
+            <li><% cities.forEach(city => { %>
+              <% if (listings[i].city == city._id.toString()) { %>
+                <%= city.name %>
+              <% } %>
+            <% }) %></li>
+            <% const price = (listings[i].price) %>
+            <li><%= '$' + price.toFixed(0) %></li>
+          </ul>
+        
+    
+        <form action='/listings/<%= listings[i]._id %>?_method=DELETE' method='POST'>
+          <button id='submit' type='submit' class='btn buttons-custom'>Remove Listing</button>
+        </form>
+        <form action='/listings/<%= listings[i]._id %>/edit' method='GET'>
+          <button id='submit' type='submit' class='btn buttons-custom'>Edit Listing</button>
+        </form>
+        <% }%>
+        <% } %>
+    </div>
+
+    <div>
+      <form action='/realtors/<%= user._id %>?_method=DELETE' method='POST'>
+        <button id='submit' type='submit' class='btn buttons-custom'>Remove <%= user.name%></button>
+      </form>
+    
+      <form action='/realtors/<%= user._id %>/edit' method='GET'>
+        <button id='submit' type='submit' class='btn buttons-custom'>Edit <%= user.name%></button>
+      </form>
+    </div>
+    
+    <div>
+      <button type="button"class="logout btn buttons-custom"><a class='dark' href='/logout'>Logout</a></button>
+    </div>
+    <div class="push"></div>
+  </div>
+  <%- include('../partials/footer.ejs') %>
+</body>
+</html>
